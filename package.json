@@ -1,0 +1,19 @@
+{
+  "name": "hodl4gldburner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.2",
+    "@truffle/hdwallet-provider": "2.0.1",
+    "truffle": "^5.4.31"
+  },
+  "devDependencies": {
+    "truffle-plugin-verify": "^0.5.21"
+  }
+}
