@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div><h2 style="text-align: center; margin-bottom: 30px">HODLBURNER</h2></div>
+    <canvas id="myChart" style="width: 100%; max-width: 700px; margin: 0 auto"></canvas>
+    <script>
+      (async function getGraphDetails() {
+        const res = await fetch("/graph", {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log(data);
+        const yValues = [...data.map((d) => d.block)];
+        const xValues = [
+          ...data.map((d) =>
+            new Intl.NumberFormat("en-IN", { maximumFractionDigits: 4 }).format(d.burnedAmount)
+          ),
+        ];
+
+        new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: yValues,
+                label: "Burned amount",
+              },
+            ],
+          },
+          options: {
+            legend: { display: false },
+            scales: {
+              yAxes: [{ ticks: { min: 6, max: 16 } }],
+            },
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

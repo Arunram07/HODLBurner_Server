@@ -1,8 +1,24 @@
 import express from "express";
+import path from "path";
 import initiateApp from "./utils/initiateWeb3.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(path.resolve(path.dirname("")), "index.html"));
+});
+
+app.get("/graph", async (req, res) => {
+  let amountInBNB = "2000000000000";
+  // await initiateApp(amountInBNB);
+  const graph = await initiateApp(amountInBNB);
+  const filteredData = graph.filter((f) => f !== null);
+  res.json(filteredData);
+});
 
 app.listen(PORT, async () => {
   /**
@@ -21,9 +37,6 @@ app.listen(PORT, async () => {
    *
    *
    */
-  let amountInBNB = "2000000000000";
-  // await initiateApp(amountInBNB);
-  const graph = setInterval(async () => await initiateApp(amountInBNB), 360000);
 
   //graph has values
   //x - axis - block
