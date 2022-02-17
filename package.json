@@ -1,0 +1,21 @@
+{
+  "name": "hodl_server2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "npx nodemon index.ts",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nguyenphu27/sdk": "git+https://github.com/nguyenphu27/pancake-swap-sdk-testnet.git",
+    "ethers": "^5.5.4",
+    "tsc-node": "0.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}
