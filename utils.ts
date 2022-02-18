@@ -24,8 +24,6 @@ const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
 //const route = Promise.resolve(getTrade());
 
-const route = getTrade();
-
 async function getTrade() {
   const HODL_ERC20: Token = await Fetcher.fetchTokenData(
     CHAIN_ID,
@@ -58,4 +56,4 @@ function getRandomAmount(erc20: Token) {
   return new TokenAmount(erc20, random.toString().substring(0, decimal));
 }
 
-export default route;
+export default getTrade;

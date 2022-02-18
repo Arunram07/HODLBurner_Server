@@ -1,25 +1,11 @@
 import trade from "./utils";
 import signAndsend from "./transactionEssentials";
-import { MIN, timer } from "./constants";
-import { MAX } from "./constants";
+import { timer, MAX, MIN } from "./constants";
 
-//let condition;
 let status = false;
 
-// do {
-//   if (!status) {
-//     status = true;
-//     condition = Promise.resolve(app()).then(() => (status = false));
-//   }
-// } while (condition);
-// {
-//   if (!status) {
-//     status = true;
-//     setTimeout();
-//   }
-// }
-
 Promise.resolve(app()).then((val) => {
+  console.log("Transaction successful");
   if (val) {
     setInterval(async () => {
       if (!status) {
@@ -28,8 +14,13 @@ Promise.resolve(app()).then((val) => {
           if (val) {
             console.log("Transaction successful");
             status = false;
+            return;
           }
         });
+      }
+      if (status) {
+        console.log("Last transaction isnt finished");
+        return;
       }
     }, timer);
   }
@@ -39,11 +30,12 @@ async function app(): Promise<Boolean> {
   let booo: Boolean = false;
   try {
     console.log("Calculating random amount between " + MIN + "  &  " + MAX);
-    const amount = await trade;
+    const amount = await trade();
     console.log("Input :" + amount.in.raw);
     console.log("Output :" + amount.out.raw);
     booo = await signAndsend(amount.in.raw, amount.out.raw);
   } catch (e: any) {
+    clearInterval();
     if (e.code == "NETWORK_ERROR") {
       console.log("Check your Network");
     } else {
