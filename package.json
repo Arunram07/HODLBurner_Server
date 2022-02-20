@@ -11,9 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nguyenphu27/sdk": "git+https://github.com/nguyenphu27/pancake-swap-sdk-testnet.git",
+    "@pancakeswap/sdk": "^2.4.3",
     "ethers": "^5.5.4",
-    "tsc-node": "0.0.3"
+    "tsc-node": "0.0.3",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "typescript": "^4.5.5"

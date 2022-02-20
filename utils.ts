@@ -9,7 +9,7 @@ import {
   TokenAmount,
   TradeType,
   Percent,
-} from "./node_modules/@nguyenphu27/sdk/dist/index";
+} from "@pancakeswap/sdk";
 
 // const {
 //   WETH,
@@ -40,7 +40,7 @@ async function getTrade() {
   const route: Route = new Route([pair], WETH[CHAIN_ID]);
   const tradeAmount: TokenAmount = getRandomAmount(WETH[CHAIN_ID]);
   //console.log(route.input);
-  const slippageTolerance: Percent = new Percent("50", "100");
+  const slippageTolerance: Percent = new Percent("350", "100");
 
   const trade1: Trade = new Trade(route, tradeAmount, TradeType.EXACT_INPUT);
 

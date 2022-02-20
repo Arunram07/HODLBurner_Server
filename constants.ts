@@ -1,38 +1,34 @@
-import { ChainId } from "@nguyenphu27/sdk";
+import { ChainId } from "@pancakeswap/sdk";
 
 //rpc node endpoint url
-const RPC_URL: string = "https://data-seed-prebsc-1-s1.binance.org:8545/";
-
-//pancakeswap router address
-const PANCAKE_ROUTER: string = "0xDE2Db97D54a3c3B008a097B2260633E6cA7DB1AF";
+const RPC_URL: string = "https://bsc-dataseed.binance.org/";
 
 //hodl erc20 address
-const HODL: string = "0xba9Ded605E6a828D57aD2919FC8693815a5fB9Fa";
+const HODL: string = "0xE8c4bEce93084D649fB630886b5332942b643BB9";
 
 //hodl burner contract address
-const HODL_BURNER: string = "0xa45FEb63d96258CBf384bF21289bf8b80aC1f0cB";
+const HODL_BURNER: string = "0xa1d8CC95B3230323E842515637B29Ed134D2A6bF";
 
 //operator address
-const OPERATOR_ADDRESS: string = "0x9F9bA619216F7B104fb309245eaefc388F642B16";
+const OPERATOR_ADDRESS: string = "0x9fe8e997BF3B87E403986Ca6e15A887EcA42E36A";
 
 //private key of operator address
 const PRIVATE_KEY: string =
-  "0ea9e2d55c083444976fcf1e878131c32c09789c2b713b1d5f14f8ecc843a9db";
+  "24286f591a3021cfba637ddc706bd41a9dfd40f053d3a362be101461a8dd4f62";
 
 //chainid
-const CHAIN_ID = ChainId.TESTNET;
+const CHAIN_ID = ChainId.MAINNET;
 
 const MIN: string = "1000000000000";
 
 const MAX: string = "90000000000000";
 
-const decimal: number = 12; //18 - 1 BNB
+const decimal: number = 16; //18 - 1 BNB
 
 const timer: number = 10000; //in ms.
 
 export {
   RPC_URL,
-  PANCAKE_ROUTER,
   HODL,
   HODL_BURNER,
   OPERATOR_ADDRESS,

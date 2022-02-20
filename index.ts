@@ -1,48 +1,80 @@
 import trade from "./utils";
-import signAndsend from "./transactionEssentials";
-import { timer, MAX, MIN } from "./constants";
+import { timer } from "./constants";
+import { ethers } from "ethers";
+import { HODL_BURNER, RPC_URL, PRIVATE_KEY } from "./constants";
+import Burner_abi from "./abis/HODL_Burner.json";
 
-let status = false;
+let isTransactionPending: boolean = false;
+let willReverted: boolean = false;
 
-Promise.resolve(app()).then((val) => {
-  console.log("Transaction successful");
-  if (val) {
-    setInterval(async () => {
-      if (!status) {
-        status = true;
-        await app().then((val) => {
-          if (val) {
-            console.log("Transaction successful");
-            status = false;
-            return;
-          }
-        });
+const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+
+const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+
+const Burner = new ethers.Contract(HODL_BURNER, Burner_abi, signer);
+
+async function app() {
+  isTransactionPending = true;
+
+  const amounts = await trade();
+
+  console.log("In: " + amounts.in.raw);
+  console.log("Out: " + amounts.out.raw);
+
+  const estimateGas = await Burner.estimateGas.buyFromPancakeandBurn(
+    amounts.in.raw.toString(),
+    amounts.out.raw.toString()
+  );
+
+  //test call
+
+  await Burner.callStatic
+    .buyFromPancakeandBurn(
+      amounts.in.raw.toString(),
+      amounts.out.raw.toString(),
+      {
+        gasLimit: estimateGas,
       }
-      if (status) {
-        console.log("Last transaction isnt finished");
-        return;
+    )
+    .then((res) => {
+      if (res == false) {
+        willReverted = true;
+        console.log("Transaction will fail");
+        throw new Error(
+          "Crashed!! Check the following and run the node again: \n 1. Make sure that we have enough liquidity in pool \n 2. Check the operator address balance \n 3. Check the balance of Burner contract"
+        );
       }
-    }, timer);
+    });
+
+  if (!willReverted) {
+    const tx = await Burner.buyFromPancakeandBurn(
+      amounts.in.raw.toString(),
+      amounts.out.raw.toString(),
+      {
+        gasLimit: estimateGas,
+      }
+    );
+
+    tx.wait().then((receipt: any) => {
+      console.log("transaction successfull : ", receipt.transactionHash);
+      isTransactionPending = false;
+    });
   }
-});
+}
 
-async function app(): Promise<Boolean> {
-  let booo: Boolean = false;
+const runApp = setInterval(async () => {
   try {
-    console.log("Calculating random amount between " + MIN + "  &  " + MAX);
-    const amount = await trade();
-    console.log("Input :" + amount.in.raw);
-    console.log("Output :" + amount.out.raw);
-    booo = await signAndsend(amount.in.raw, amount.out.raw);
-  } catch (e: any) {
-    clearInterval();
-    if (e.code == "NETWORK_ERROR") {
-      console.log("Check your Network");
-    } else {
-      console.log(
-        "Crashed!! Check the following and run the node again: \n 1. Make sure that we have enough liquidity in pool \n 2. Check the operator address balance \n 3. Check the balance of Burner contract"
-      );
+    if (!isTransactionPending) {
+      await app();
+    } else if (isTransactionPending) {
+      console.log("Transaction pending");
     }
+  } catch (err) {
+    console.log(err);
+    stopApp();
   }
-  return booo;
+}, timer);
+
+function stopApp() {
+  clearInterval(runApp);
 }
